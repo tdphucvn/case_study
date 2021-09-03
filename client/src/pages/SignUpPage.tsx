@@ -1,10 +1,9 @@
-import React from 'react'
+import React from 'react';
+import SignUpForm from '../components/authentication/SignUpForm';
 
 const SignUpPage = () => {
     return (
-        <div>
-            
-        </div>
+        <SignUpForm />
     )
 };
 

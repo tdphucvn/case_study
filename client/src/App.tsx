@@ -14,8 +14,8 @@ const App = () => {
     <Router>
       <Switch>
         <RestrictedRoute exact path="/login" component={LoginPage} />
-        <RestrictedRoute exact path="/login" component={SignUpPage} />
-        <Route exact path="/" component={NotePage} />
+        <RestrictedRoute exact path="/signup" component={SignUpPage} />
+        <Route path="/" component={NotePage} />
       </Switch>
     </Router>
     </>
