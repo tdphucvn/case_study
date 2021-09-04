@@ -15,7 +15,7 @@ export const loginRequest = async (req: Request, res: Response): Promise<void> =
         const validPassword = await bcrypt.compare(credentials.password, user.password);
         if(!validPassword) throw new Error("Invalid Password");
         
-        const token = assigningTokens(user, res);
+        const token = assigningTokens(user, res); // assign new tokens after being successfully logged in
 
         res.json({message: 'Succesfully logged in', auth: true, id: user._id, acessToken: token[0], refreshToken: token[1]});
     } catch (error: any) {

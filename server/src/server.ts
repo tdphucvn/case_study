@@ -1,3 +1,4 @@
+// Require .env file if the application is not in the production
 if(process.env.NODE_ENV !== 'production'){
     require('dotenv').config({path: '.env'});
 };
@@ -15,6 +16,7 @@ const app: Application = express();
 app.use(cookieParser());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
+// sending HTTP cookies - require cors
 app.use(cors({ credentials: true, origin: 'http://localhost:3000'}));
 
 import noteRoutes from './routes/noteRoutes';

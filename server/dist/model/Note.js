@@ -42,9 +42,5 @@ var noteSchema = new mongoose_1.default.Schema({
         required: true,
         ref: 'user'
     },
-    favourite: {
-        type: Boolean,
-        default: false,
-    }
 });
 exports.default = (0, mongoose_1.model)('note', noteSchema);

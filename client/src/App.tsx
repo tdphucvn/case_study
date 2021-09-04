@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'; 
 import RestrictedRoute from './routes/RestrictedRoute';
 
-
 import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
 import NotePage from './pages/NotePage';
