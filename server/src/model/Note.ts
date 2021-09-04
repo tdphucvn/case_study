@@ -6,8 +6,9 @@ const noteSchema: Schema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    subtitle: {
+    preview: {
         type: String,
+        required: true,
     },
     content: {
         type: String,

@@ -9,7 +9,7 @@ export interface IUser extends mongoose.Document {
 
 export interface INote extends mongoose.Document {
     title: string;
-    subtitle?: string;
+    preview: string;
     content: string;
     date: Date;
     user: mongoose.Schema.Types.ObjectId;
