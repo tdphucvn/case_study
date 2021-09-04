@@ -9,9 +9,10 @@ import PrivateRoute from '../routes/PrivateRoute';
 import { Route, Switch } from 'react-router-dom';
 
 import { Grid } from '@material-ui/core';
-
-
+ 
 const NotePage = () => {
+
+
     return (
         <Grid container>
             <Grid item md={3} xs={12}>

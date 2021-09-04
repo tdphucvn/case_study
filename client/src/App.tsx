@@ -7,8 +7,18 @@ import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
 import NotePage from './pages/NotePage';
 
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from './redux/store';
+import { getNotes } from './redux/reducers/notes';
 
 const App = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { accessToken } = useSelector((state: RootState) => state.auth);
+
+  dispatch(getNotes(accessToken))
+      .then(res => console.log(res))
+      .catch(err => console.log(err));
+
   return (
     <>
     <Router>
