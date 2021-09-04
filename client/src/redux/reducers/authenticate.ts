@@ -1,17 +1,11 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import * as authenticateAPI from '../../api/authenticateApi';
 
-interface IUser {
-    _id: string;
-    username: string;
-    email: string;
-    password: string;
-};
+
 interface IAuthenticate {
-    loading: boolean;
     authenticated: boolean;
     accessToken: string;
-    user: Array<IUser>;
+    id: string;
 };
 
 interface ILoginCredentials {
@@ -32,10 +26,9 @@ interface ILogoutData {
 };
 
 const initialState: IAuthenticate = {
-    loading: false,
     authenticated: false,
     accessToken: '',
-    user: []
+    id: ''
 };
 
 export const loginRequest = createAsyncThunk(
@@ -59,7 +52,7 @@ export const registerRequest = createAsyncThunk(
         try {
             const {username, password, email, firstName, lastName} = credentials;
             const response = await authenticateAPI.registerRequest(username, password, email, firstName, lastName);
-            if(response.status === 401) return rejectWithValue({message: response.data.message, status: response.status});
+            if(response.status === 400) return rejectWithValue({message: response.data.message, status: response.status});
             return response;
         } catch (error) {
             return error;
@@ -91,33 +84,29 @@ export const authenticateSlice = createSlice({
         unauthorized: (state) => {
             state.authenticated = false;
             state.accessToken = '';
-            state.user = [];
+            state.id = '';
         }, 
     },
     extraReducers: (builder) => {
         builder.addCase(loginRequest.fulfilled, (state, action) => {
-            state.loading = false;
             state.authenticated = true;
-            state.user = action.payload.data.user;
+            state.id = action.payload.data.id;
             state.accessToken = action.payload.data.accessToken;
         });
         builder.addCase(loginRequest.rejected, (state, action) => {
-            state.loading = false;
             state.authenticated = false;
         });
         builder.addCase(registerRequest.fulfilled, (state, action) => {
-            state.loading = false;
             state.authenticated = true;
-            state.user = action.payload.data.user;
+            state.id = action.payload.data.id;
             state.accessToken = action.payload.data.accessToken;
         });
         builder.addCase(registerRequest.rejected, (state, action) => {
-            state.loading = false;
             state.authenticated = false;
         });
         builder.addCase(logoutRequest.fulfilled, (state, action) => {
             state.authenticated = false;
-            state.user = [];
+            state.id = '';
             state.accessToken = '';
         });
     },

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import NotePanelPreview from './NotePanelPreview';
 import { Container, Grid, makeStyles } from '@material-ui/core';
 import { useSelector } from 'react-redux';
@@ -23,31 +23,31 @@ export interface INote {
     content: string;
 }
 
-// const notesArr: Array<INote> = [
-//     {
-//         _id: '89',
-//         title: 'First Note',
-//         date: '24.07.2017',
-//         content: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Blanditiis quaerat itaque error voluptate esse? Expedita amet accusamus, repudiandae velit reiciendis corrupti cupiditate exercitationem pariatur recusandae, natus dolor voluptatem est laudantium'
-//     },
-//     {
-//         _id: '12',
-//         title: 'Second Note',
-//         date: '24.07.2021',
-//         content: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Blanditiis quaerat itaque error voluptate esse? Expedita amet accusamus, repudiandae velit reiciendis corrupti cupiditate exercitationem pariatur recusandae, natus dolor voluptatem est laudantium'
-//     },
-    
-// ]
+interface IProps {
+    searchQuery: string;
+};
 
-const NotesPreviewContainer = () => {
+const NotesPreviewContainer = (props: IProps) => {
     const classes = useStyles();
     const { notes } = useSelector((state: RootState) => state.notes);
-    
+    const [displayedNotes, setDisplayedNotes] = useState<Array<INote>>([]);
+
+    useEffect(() => {
+        if(props.searchQuery === '') setDisplayedNotes(notes);
+        const searchNotesRegex = new RegExp(props.searchQuery, "i");
+        filterNotes(searchNotesRegex);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [props.searchQuery, notes]);
+
+    const filterNotes = (regex: any ) => {
+        let searchedProducts = [...notes].filter(note => regex.test(note.preview));
+        setDisplayedNotes(searchedProducts);
+    };
 
     return (
         <Container className={classes.notesContainer}>
             <Grid container direction="column">
-                {notes.map((note: INote, index) => (
+                {displayedNotes.map((note: INote, index) => (
                     <NotePanelPreview key={index} note={note}/>
                 ))}
             </Grid>

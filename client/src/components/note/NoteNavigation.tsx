@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, IconButton, Typography, makeStyles, Container } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -7,10 +7,16 @@ import { changeMode } from '../../redux/reducers/mode';
 import { AppDispatch } from '../../redux/store';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
+import { cleanNotes } from '../../redux/reducers/notes';
 
 import Brightness2Icon from '@material-ui/icons/Brightness2';
 import Brightness7Icon from '@material-ui/icons/Brightness7';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 
+import withWidth from '@material-ui/core/withWidth';
+import { Breakpoint } from '@material-ui/core/styles/createBreakpoints';
+
+import DrawerNavigation from './DrawerNavigation';
 
 const useStyles = makeStyles((theme) => ({
     navigationContainer: {
@@ -18,6 +24,10 @@ const useStyles = makeStyles((theme) => ({
         height: '10%',
         alignItems: 'center',
         maxWidth: 'none',
+        [theme.breakpoints.down('sm')]: {
+            height: 'auto',
+            minHeight: '10%',
+        }
     },
     grow: {
         flexGrow: 1,
@@ -25,27 +35,30 @@ const useStyles = makeStyles((theme) => ({
     authenticationButton: {
         width: '100px',
         marginLeft: theme.spacing(3),
-    }
+    },
 }));
 
-const NoteNavigation = () => {
+const NoteNavigation = (props: {width: Breakpoint}) => {
     const classes = useStyles();
     const dispatch = useDispatch<AppDispatch>();
+    const [drawer, setDrawer] = useState<boolean>(false);
     const { authenticated } = useSelector((state: RootState) => state.auth);
     const { lightMode } = useSelector((state: RootState) => state.mode);
 
     const handleLogOut = () => {
         dispatch(logoutRequest({message: "Logout request"}))
-            .then(res => console.log(res));
+            .then(res => console.log(res))
+            .then(() => dispatch(cleanNotes()));
     };
 
     const handleChangeMode = () => {
         dispatch(changeMode())
     };
 
+
     return (
         <Container className={classes.navigationContainer}>
-            <Typography variant="h4" color="primary">Awesome Notepad</Typography>
+            {props.width === 'sm' || props.width === "xs" ? <IconButton color="primary" onClick={() => setDrawer(previousState => !previousState)}><ArrowBackIosIcon /></IconButton> : <Typography variant="h4" color="primary">Awesome Notepad</Typography>}
             <div className={classes.grow}>
             </div>
             <div>
@@ -58,8 +71,9 @@ const NoteNavigation = () => {
                     <Button color="primary" variant="contained" className={classes.authenticationButton} onClick={handleLogOut}>Log Out</Button>
                 }
             </div>
+            {props.width === 'sm' || props.width === "xs" ? <DrawerNavigation drawer={drawer} setDrawer={setDrawer}/> : null}
         </Container>
     )
 };
 
-export default NoteNavigation;
+export default withWidth()(NoteNavigation);

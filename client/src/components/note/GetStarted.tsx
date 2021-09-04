@@ -12,15 +12,16 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
+        [theme.breakpoints.down('xs')]: {
+            padding: '0 5px'
+        }
     },
 }));
 
 const GetStarted = () => {
     const classes = useStyles();
     const { authenticated } = useSelector((state: RootState) => state.auth);
-
-    console.log(authenticated)
-
+    
     return (
         <Container className={classes.getStartedContainer}>
             <Typography variant="h6" align="center">Click on the button to get started with us!</Typography>

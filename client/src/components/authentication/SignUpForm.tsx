@@ -85,13 +85,12 @@ const RegisterForm = () => {
     if(password !== confirmpassword) { generateErrorMessage(setErrorMessage, 'Passwords do not match'); return; };
     
     dispatch(registerRequest({username, password, email, firstName, lastName}))
-      .then(res => {
-        if(res.payload.status === 400) {generateErrorMessage(setErrorMessage, res.payload.data.message); return; };
-      })
-      .then((data) => {
-        console.log(data);
+      .then((res: any) => {
+        const { message, status } = res.payload;
+        if(status === 400) {generateErrorMessage(setErrorMessage, message); return; };
         history.push('/');
       })
+      .catch((err) => console.log(err));
   };
 
   const handleMatchingPasswords = (e: React.ChangeEvent<HTMLInputElement>) => {

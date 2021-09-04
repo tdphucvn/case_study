@@ -40,37 +40,41 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+var User_1 = __importDefault(require("../model/User"));
 var authenticate = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var accessTokenSecret, userSession, authHeader, accessToken, decoded, error_1, refreshToken, refreshTokenSecret, decoded, newAccessToken, newRefreshToken, error_2;
+    var accessTokenSecret, userId, user, authHeader, accessToken, decoded, error_1, refreshToken, refreshTokenSecret, decoded, newAccessToken, newRefreshToken, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 accessTokenSecret = "" + process.env.ACCESS_TOKEN_SECRET;
-                userSession = req.cookies.userSession;
+                userId = req.cookies.id;
+                return [4, User_1.default.findById(userId)];
+            case 1:
+                user = _a.sent();
                 authHeader = req.headers.authorization;
                 if (!authHeader) {
                     res.status(401).json({ message: 'Unauthorized' });
                     return [2];
                 }
-                _a.label = 1;
-            case 1:
-                _a.trys.push([1, 3, , 8]);
+                _a.label = 2;
+            case 2:
+                _a.trys.push([2, 4, , 9]);
                 accessToken = authHeader.split(' ')[1];
                 return [4, jsonwebtoken_1.default.verify(accessToken, accessTokenSecret)];
-            case 2:
+            case 3:
                 decoded = _a.sent();
-                if (JSON.stringify(decoded.user) !== JSON.stringify(userSession)) {
+                if (JSON.stringify(decoded.user) !== JSON.stringify(user)) {
                     res.status(401).json({ message: 'Unauthorized' });
                     return [2];
                 }
                 ;
                 req.decoded = decoded;
-                return [3, 8];
-            case 3:
-                error_1 = _a.sent();
-                _a.label = 4;
+                return [3, 9];
             case 4:
-                _a.trys.push([4, 6, , 7]);
+                error_1 = _a.sent();
+                _a.label = 5;
+            case 5:
+                _a.trys.push([5, 7, , 8]);
                 refreshToken = req.cookies.refreshToken;
                 refreshTokenSecret = "" + process.env.REFRESH_TOKEN_SECRET;
                 if (refreshToken == null || refreshToken == '') {
@@ -79,21 +83,21 @@ var authenticate = function (req, res, next) { return __awaiter(void 0, void 0, 
                     return [2];
                 }
                 return [4, jsonwebtoken_1.default.verify(refreshToken, refreshTokenSecret)];
-            case 5:
+            case 6:
                 decoded = _a.sent();
-                if (JSON.stringify(decoded.user) !== JSON.stringify(userSession)) {
+                if (JSON.stringify(decoded.user) !== JSON.stringify(user)) {
                     console.log('user and userSession is not matching');
                     res.status(401).json({ message: 'Unauthorized' });
                     return [2];
                 }
                 ;
-                newAccessToken = jsonwebtoken_1.default.sign({ user: userSession }, accessTokenSecret, { expiresIn: '30s' });
-                newRefreshToken = jsonwebtoken_1.default.sign({ user: userSession }, refreshTokenSecret, { expiresIn: '1day' });
+                newAccessToken = jsonwebtoken_1.default.sign({ user: user }, accessTokenSecret, { expiresIn: '30s' });
+                newRefreshToken = jsonwebtoken_1.default.sign({ user: user }, refreshTokenSecret, { expiresIn: '1day' });
                 req.accessToken = newAccessToken;
                 req.decoded = decoded;
                 res.cookie('refreshToken', newRefreshToken, { httpOnly: true });
-                return [3, 7];
-            case 6:
+                return [3, 8];
+            case 7:
                 error_2 = _a.sent();
                 res.clearCookie('authorization');
                 res.clearCookie('refreshToken');
@@ -101,10 +105,10 @@ var authenticate = function (req, res, next) { return __awaiter(void 0, void 0, 
                 console.log(error_2);
                 res.status(401).json({ message: 'Unauthorized' });
                 return [2];
-            case 7:
-                ;
-                return [3, 8];
             case 8:
+                ;
+                return [3, 9];
+            case 9:
                 ;
                 next();
                 return [2];

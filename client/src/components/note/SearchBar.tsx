@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Grid, TextField, InputAdornment, makeStyles } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
+
+import debounce from 'lodash.debounce';
 
 const useStyles = makeStyles((theme) => ({
     searchBarContainer: {
@@ -14,9 +16,23 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const SearchBar = () => {
+interface IProps {
+    setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
+};
+
+const SearchBar = (props: IProps) => {
     const classes = useStyles();
     
+    const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+        props.setSearchQuery(event.target.value);
+    };
+    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const debouncedChangeHandler = useCallback(
+        debounce(changeHandler, 300)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    , []);
+
     return (
         <Grid container className={classes.searchBarContainer}>
             <TextField 
@@ -24,6 +40,7 @@ const SearchBar = () => {
                 id="search-input"
                 placeholder="Search..."
                 variant="outlined"
+                onChange={debouncedChangeHandler}
                 InputProps={{
                     startAdornment: (
                         <InputAdornment position="start">

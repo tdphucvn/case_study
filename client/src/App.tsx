@@ -9,15 +9,22 @@ import NotePage from './pages/NotePage';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from './redux/store';
-import { getNotes } from './redux/reducers/notes';
+import { getNotes, cleanNotes } from './redux/reducers/notes';
+import { unauthorized } from './redux/reducers/authenticate';
 
 const App = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { accessToken } = useSelector((state: RootState) => state.auth);
 
   dispatch(getNotes(accessToken))
-      .then(res => console.log(res))
-      .catch(err => console.log(err));
+      .then((res: any) => {
+        const { status } = res.payload;
+        if(status === 401) {
+          dispatch(unauthorized());
+          dispatch(cleanNotes());
+        };
+      })
+      .catch(err => console.log(err.response));
 
   return (
     <>

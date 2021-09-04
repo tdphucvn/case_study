@@ -28,7 +28,7 @@ export const getNotes = createAsyncThunk(
             if(response.status === 401) return rejectWithValue({message: response.data.message, status: response.status});
             return response;
         } catch (error) {
-            return error;
+            return rejectWithValue({message: error.response.data.message, status: error.response.status});
         };
     },
 );
@@ -47,13 +47,18 @@ export const notesSlice = createSlice({
         deleteNote: (state, action) => {
             const deletedNoteIndex = state.notes.findIndex((note) => note._id === action.payload._id);
             state.notes.splice(deletedNoteIndex, 1);
+            state.activeNote = null;
         },
         setActive: (state, action) => {
             const previousActiveNote = state.activeNote;
             if(previousActiveNote !== null && previousActiveNote !== undefined) previousActiveNote.active = false;
             const newActiveNote: Note = action.payload;
             state.activeNote = newActiveNote;
-        }
+        },
+        cleanNotes: (state) => {
+            state.activeNote = null;
+            state.notes = [];
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(getNotes.fulfilled, (state, action) => {
@@ -62,5 +67,5 @@ export const notesSlice = createSlice({
     },
 });
 
-export const { addNote, updateNote, deleteNote, setActive } = notesSlice.actions;
+export const { addNote, updateNote, deleteNote, setActive, cleanNotes } = notesSlice.actions;
 export default notesSlice.reducer;

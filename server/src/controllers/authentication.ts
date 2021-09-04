@@ -9,9 +9,6 @@ const saltRounds: number = 10;
 
 export const loginRequest = async (req: Request, res: Response): Promise<void> => {
     try {
-        const cookies = req.cookies.refreshToken;
-        console.log(cookies);
-
         const credentials = req.body as Pick<IUser, "username" | "password" >;
         const user = await User.findOne({username: credentials.username});
         if(user == null) throw new Error("User not found");
@@ -20,7 +17,7 @@ export const loginRequest = async (req: Request, res: Response): Promise<void> =
         
         const token = assigningTokens(user, res);
 
-        res.json({message: 'Succesfully logged in', auth: true, user, acessToken: token[0], refreshToken: token[1]});
+        res.json({message: 'Succesfully logged in', auth: true, id: user._id, acessToken: token[0], refreshToken: token[1]});
     } catch (error: any) {
         res.status(401).json({message: error.message});
     }; 
@@ -29,7 +26,6 @@ export const loginRequest = async (req: Request, res: Response): Promise<void> =
 export const registerRequest = async (req: Request, res: Response): Promise<void> => {
     try {
         const credentials = req.body as Pick<IUser, "username" | "email" | "password">; // Receiving the data from the user and checking if it is valid
-        console.log(credentials)
         const usernameExist = await User.findOne({username: credentials.username}); //Checking if the username already exists
         if(usernameExist) throw new Error("Username is already used");
         const emailExists = await User.findOne({email: credentials.email}); //Checking if the email is already being used
@@ -45,7 +41,7 @@ export const registerRequest = async (req: Request, res: Response): Promise<void
 
         const token = assigningTokens(user, res);
 
-        res.json({message: 'Thank your for signing up', auth: true, user, acessToken: token[0], refreshToken: token[1]});
+        res.json({message: 'Thank your for signing up', auth: true, id: user._id, acessToken: token[0], refreshToken: token[1]});
     } catch (error: any) {
         res.status(400).json({message: error.message});
     };
@@ -54,7 +50,7 @@ export const registerRequest = async (req: Request, res: Response): Promise<void
 export const logoutRequest = async (req: Request, res: Response): Promise<void> => {
     res.clearCookie('authorization'); 
     res.clearCookie('refreshToken');
-    res.clearCookie('userSession');
+    res.clearCookie('id');
 
     res.status(200).json({message: 'Logged Out'});
 };
@@ -67,7 +63,7 @@ const assigningTokens = (user: IUser, response: Response) => {
     
     response.cookie('authorization', newAccessToken,  { httpOnly: true, secure: true}); // Using cookie to store Access token
     response.cookie('refreshToken', newRefreshToken, { httpOnly: true, secure: true}); // Using cookie to store Refresh token
-    response.cookie('userSession', user, { httpOnly: true, secure: true}); // Using cookie to store data about the user
+    response.cookie('id', user.id, { httpOnly: true, secure: true}); // Using cookie to store data about the user
 
     return [newAccessToken, newRefreshToken];
 };

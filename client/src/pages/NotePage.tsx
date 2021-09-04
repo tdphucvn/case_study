@@ -8,17 +8,31 @@ import PrivateRoute from '../routes/PrivateRoute';
 
 import { Route, Switch } from 'react-router-dom';
 
-import { Grid } from '@material-ui/core';
+import { Grid, makeStyles } from '@material-ui/core';
  
-const NotePage = () => {
+const useStyles = makeStyles((theme) => ({
+    container: {
+        [theme.breakpoints.down('sm')]: {
+            display: 'block',
+        },
+    },
+    editor: {
+        [theme.breakpoints.down('sm')]: {
+            height: '100vh',
+            overflow: 'auto'
+        },
+    },
+}));
 
+const NotePage = () => {
+    const classes = useStyles();
 
     return (
-        <Grid container>
-            <Grid item md={3} xs={12}>
+        <Grid container className={classes.container}>
+            <Grid item lg={3} md={4} sm={12}>
                 <NotesPanel />
             </Grid>
-            <Grid item md={9} xs={12}>
+            <Grid item lg={9} md={8} sm={12} className={classes.editor}>
                 <NoteNavigation />
                 <Switch>
                     <PrivateRoute exact path="/:id" component={NoteContainer} />

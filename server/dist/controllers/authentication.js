@@ -45,13 +45,11 @@ var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var User_1 = __importDefault(require("../model/User"));
 var saltRounds = 10;
 var loginRequest = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var cookies, credentials, user, validPassword, token, error_1;
+    var credentials, user, validPassword, token, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 3, , 4]);
-                cookies = req.cookies.refreshToken;
-                console.log(cookies);
                 credentials = req.body;
                 return [4, User_1.default.findOne({ username: credentials.username })];
             case 1:
@@ -64,7 +62,7 @@ var loginRequest = function (req, res) { return __awaiter(void 0, void 0, void 0
                 if (!validPassword)
                     throw new Error("Invalid Password");
                 token = assigningTokens(user, res);
-                res.json({ message: 'Succesfully logged in', auth: true, user: user, acessToken: token[0], refreshToken: token[1] });
+                res.json({ message: 'Succesfully logged in', auth: true, id: user._id, acessToken: token[0], refreshToken: token[1] });
                 return [3, 4];
             case 3:
                 error_1 = _a.sent();
@@ -84,7 +82,6 @@ var registerRequest = function (req, res) { return __awaiter(void 0, void 0, voi
             case 0:
                 _a.trys.push([0, 6, , 7]);
                 credentials = req.body;
-                console.log(credentials);
                 return [4, User_1.default.findOne({ username: credentials.username })];
             case 1:
                 usernameExist = _a.sent();
@@ -110,7 +107,7 @@ var registerRequest = function (req, res) { return __awaiter(void 0, void 0, voi
             case 5:
                 _a.sent();
                 token = assigningTokens(user, res);
-                res.json({ message: 'Thank your for signing up', auth: true, user: user, acessToken: token[0], refreshToken: token[1] });
+                res.json({ message: 'Thank your for signing up', auth: true, id: user._id, acessToken: token[0], refreshToken: token[1] });
                 return [3, 7];
             case 6:
                 error_2 = _a.sent();
@@ -127,7 +124,7 @@ var logoutRequest = function (req, res) { return __awaiter(void 0, void 0, void 
     return __generator(this, function (_a) {
         res.clearCookie('authorization');
         res.clearCookie('refreshToken');
-        res.clearCookie('userSession');
+        res.clearCookie('id');
         res.status(200).json({ message: 'Logged Out' });
         return [2];
     });
@@ -140,6 +137,6 @@ var assigningTokens = function (user, response) {
     var newRefreshToken = jsonwebtoken_1.default.sign({ user: user }, refreshSecretToken, { expiresIn: '1day' });
     response.cookie('authorization', newAccessToken, { httpOnly: true, secure: true });
     response.cookie('refreshToken', newRefreshToken, { httpOnly: true, secure: true });
-    response.cookie('userSession', user, { httpOnly: true, secure: true });
+    response.cookie('id', user.id, { httpOnly: true, secure: true });
     return [newAccessToken, newRefreshToken];
 };

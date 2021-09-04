@@ -6,10 +6,10 @@ import ToolBar from './ToolBar';
 import noteStyles from '../../css/note.module.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../../redux/store';
-import { addNote, updateNote } from '../../api/notesApi';
+import { addNote, updateNote, deleteNote } from '../../api/notesApi';
 import { INote } from './NotesPreviewContainer';
-import { addNote as addNoteReducer, updateNote as updateNoteReducer, setActive } from '../../redux/reducers/notes';
-
+import { addNote as addNoteReducer, updateNote as updateNoteReducer, setActive, deleteNote as deleteNoteReducer, cleanNotes } from '../../redux/reducers/notes';
+import { unauthorized, updateAccessToken } from '../../redux/reducers/authenticate';
 
 const useStyles = makeStyles((theme) => ({
     noteContainer: {
@@ -76,26 +76,54 @@ const NoteContainer = () => {
         const preview = editor.innerText;
         const title = editor.innerText.substring(0, 20);
         
-        console.log(preview);
-
         if(newNote) {
             addNote(title, content, preview, accessToken)
-                .then((res) => res.data.savedNote)
+                .then((res) => {
+                   if(res.data.accessToken !== undefined) dispatch(updateAccessToken(res.data.accessToken));
+                   return res.data.savedNote;
+                })
                 .then((data) => {
                     dispatch(addNoteReducer(data));
                     const {_id} = data;
                     history.push(`/${_id}`);
                 })
-                .catch((err) => console.log(err.message));
+                .catch((err) => {
+                    const status = err.response.status;
+                    if(status === 401) unauthorizedAccess();
+                });
             return;
         };
 
         updateNote(title, content, preview, accessToken, id)
-            .then((res) => res.data.note)
+            .then((res) => {
+                if(res.data.accessToken !== undefined) dispatch(updateAccessToken(res.data.accessToken));
+                return res.data.note
+            })
             .then((data) => dispatch(updateNoteReducer(data)))
-            .catch((err) => console.log(err.message));
+            .catch((err) => {
+                const status = err.response.status;
+                if(status === 401) unauthorizedAccess();
+            });
         return;
     };
+
+    const deleteNoteFunction = () => {
+        deleteNote(accessToken, id)
+            .then(res => {
+                if(res.data.accessToken !== undefined) dispatch(updateAccessToken(res.data.accessToken));
+            })
+            .then(() => dispatch(deleteNoteReducer(note)))
+            .then(() => history.push('/'))
+            .catch((err) => {
+                const status = err.response.status;
+                if(status === 401) unauthorizedAccess();
+            });
+    };
+
+    const unauthorizedAccess = () => {
+        dispatch(cleanNotes());
+        dispatch(unauthorized());
+    }
 
     useEffect(() => {
         const editor = document.getElementById('note-editor');
@@ -106,7 +134,7 @@ const NoteContainer = () => {
     if(note !== undefined) {
         return (
             <>
-                <ToolBar saveFunction={getNoteContent} />
+                <ToolBar saveFunction={getNoteContent} deleteFunction={deleteNoteFunction} note={note}/>
                 <div className={classes.noteContainer}>
                     <div className={noteStyles.editor} id="note-editor" contentEditable="true"></div> 
     
