@@ -26,11 +26,7 @@ const authenticate =async (req: Request | any, res: Response, next: NextFunction
             const refreshTokenSecret: string = `${process.env.REFRESH_TOKEN_SECRET}`;
             if(refreshToken == null || refreshToken == '') { console.log('RefreshToken is not provided') ;res.status(401).json({message: 'Unauthorized'}); return; }
             // verify the refreshToken
-            const decoded: any = await jwt.verify(refreshToken, refreshTokenSecret);
-            // check if the client is the person to whom the refreshToken belongs
-            console.log(decoded.user, user);
-            if(JSON.stringify(decoded.user) !== JSON.stringify(user)) {console.log('user and userSession is not matching'); res.status(401).json({message: 'Unauthorized'}); return;};
-            
+            const decoded: any = await jwt.verify(refreshToken, refreshTokenSecret);            
             // Creating new tokens
             const newAccessToken = jwt.sign({ user: user }, accessTokenSecret, {expiresIn: '30s'});
             const newRefreshToken = jwt.sign({ user: user }, refreshTokenSecret, {expiresIn: '1day'});

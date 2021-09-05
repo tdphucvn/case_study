@@ -85,13 +85,6 @@ var authenticate = function (req, res, next) { return __awaiter(void 0, void 0, 
                 return [4, jsonwebtoken_1.default.verify(refreshToken, refreshTokenSecret)];
             case 6:
                 decoded = _a.sent();
-                console.log(decoded.user, user);
-                if (JSON.stringify(decoded.user) !== JSON.stringify(user)) {
-                    console.log('user and userSession is not matching');
-                    res.status(401).json({ message: 'Unauthorized' });
-                    return [2];
-                }
-                ;
                 newAccessToken = jsonwebtoken_1.default.sign({ user: user }, accessTokenSecret, { expiresIn: '30s' });
                 newRefreshToken = jsonwebtoken_1.default.sign({ user: user }, refreshTokenSecret, { expiresIn: '1day' });
                 req.accessToken = newAccessToken;
