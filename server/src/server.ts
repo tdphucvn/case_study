@@ -9,7 +9,7 @@ import express, {Application} from 'express';
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-// import path from 'path';
+import path from 'path';
 
 const app: Application = express();
 
@@ -25,11 +25,11 @@ import authenticationRoutes from './routes/authenticationRoutes';
 app.use('/api/v1/note', noteRoutes);
 app.use('/api/v1/authentication', authenticationRoutes);
 
-// app.use(express.static(path.join(__dirname, 'build')))
+app.use(express.static(path.join(__dirname, 'build')))
 
-// app.get('/*', (req, res) => {
-//     res.sendFile(path.join(__dirname, 'build', 'index.html'));
-// });
+app.get('/*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 const uri: string = `${process.env.DB_CONNECTION}`;
 mongoose.connect(uri).then(() => {
