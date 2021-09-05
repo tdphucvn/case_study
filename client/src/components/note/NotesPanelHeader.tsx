@@ -29,8 +29,10 @@ const NotesPanelHeader = (props: IProps) => {
     const {toggleDrawer} = props;
 
     useEffect(() => {
+        // if the toggle drawer is not provided return
         if(toggleDrawer === undefined) return;
         const addButton = document.querySelectorAll('#add-new-note');
+        // add event listener to call the toggle drawer
         addButton[1].addEventListener('click', () => {
             toggleDrawer();
         });

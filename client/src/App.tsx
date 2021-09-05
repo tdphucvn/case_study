@@ -15,9 +15,11 @@ const App = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { accessToken } = useSelector((state: RootState) => state.auth);
 
+  // get the notes from the database on page load and store them in redux for easier access
   dispatch(getNotes(accessToken))
       .then((res: any) => {
         const { status } = res.payload;
+        // if the response status is 401 clear stored data in redux
         if(status === 401) {
           dispatch(unauthorized());
           dispatch(cleanNotes());

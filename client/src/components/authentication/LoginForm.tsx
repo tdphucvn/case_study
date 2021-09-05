@@ -45,19 +45,17 @@ type ErrorMessage = {
 };
 
 
-const generateErrorMessage = (setter:  React.Dispatch<React.SetStateAction<ErrorMessage>>, message: string) => {
-  setter({error: true, message});
-};
-
-
 const LoginForm = () => {
+  // default state of a error message
   const [errorMessage, setErrorMessage] = useState<ErrorMessage>({error: false, message: ''});
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch<AppDispatch>();
 
+  // handle login request function
   const handleLoginRequest = async (e: React.SyntheticEvent) => {
     e.preventDefault();
+    // create target object with the values from the form
     const target = e.target as typeof e.target & {
       username: { value: string };
       password: { value: string };
@@ -65,13 +63,16 @@ const LoginForm = () => {
 
     const username = target.username.value;
     const password = target.password.value;
-    
+    // if any of the fields are not filled
     if(username === '' || password === '')
-    { generateErrorMessage(setErrorMessage, 'Fields are requried'); return; };
+    { setErrorMessage({error: true, message: 'Fields are requried'}); return; };
     
+    // call the API request to login
     dispatch(loginRequest({username, password}))
       .then(res => {
-        if(res.payload.status === 401) {generateErrorMessage(setErrorMessage, res.payload.message); return; };
+        // if something went wrong display error message
+        if(res.payload.status === 401) {setErrorMessage({error: true, message: res.payload.message}); return; };
+        // after successfuly logging in redirect to the main page
         history.push('/');
       });
   };

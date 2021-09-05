@@ -17,6 +17,7 @@ const reducer = combineReducers({
     notes: notesReducer,
 });
 
+// in order to not loose all the data on every page load, storing data in localStorage
 const persistedReducer = persistReducer(persistConfig, reducer);
 
 export const store = configureStore({

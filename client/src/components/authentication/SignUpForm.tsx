@@ -46,9 +46,6 @@ type ErrorMessage = {
   message: string;
 };
 
-const generateErrorMessage = (setter:  React.Dispatch<React.SetStateAction<ErrorMessage>>, message: string) => {
-  setter({error: true, message});
-};
 
 const RegisterForm = () => {
   const [password, setPassword] = useState<string>('');
@@ -58,11 +55,14 @@ const RegisterForm = () => {
   const dispatch = useDispatch<AppDispatch>();
   const history = useHistory();
 
+  // handle register request function
   const handleRegisterRequest = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     
-    if(!matchingPasswords) { generateErrorMessage(setErrorMessage, 'Passwords do not match!'); return; };
+    // if the passwords do not match display the error and return
+    if(!matchingPasswords) { setErrorMessage({error: true, message: 'Passwords do not match!'}); return; };
     
+    // creating the target object witht values
     const target = e.target as typeof e.target & {
       firstName: { value: string };
       lastName: { value: string };
@@ -78,21 +78,26 @@ const RegisterForm = () => {
     const username = target.username.value;
     const password = target.password.value;
 
+    // if any of the fields is not filled
     if(email === '' || firstName === '' || lastName === '' || username === '' || password === '')
-    { generateErrorMessage(setErrorMessage, 'Fields are requried!'); return; };
+    { setErrorMessage({error: true, message: 'Fields are requried!'}); return; };
 
     const confirmpassword = target.comfirmpassword.value;
-    if(password !== confirmpassword) { generateErrorMessage(setErrorMessage, 'Passwords do not match'); return; };
-    
+    if(password !== confirmpassword) { setErrorMessage({error: true, message: 'Passwords do not match'}); return; };
+
+    // call API request to register
     dispatch(registerRequest({username, password, email, firstName, lastName}))
       .then((res: any) => {
         const { message, status } = res.payload;
-        if(status === 400) {generateErrorMessage(setErrorMessage, message); return; };
+        // if something went wrong display error message
+        if(status === 400) {setErrorMessage({error: true, message: message}); return; };
+        // after being successfuly registered redirect to the index page
         history.push('/');
       })
       .catch((err) => console.log(err));
   };
 
+  // on confirm password change check if the passwords are matching
   const handleMatchingPasswords = (e: React.ChangeEvent<HTMLInputElement>) => {
     const confirmPassword = e.target.value;
     if(confirmPassword !== password){ setMatchingPasswords(false); return};

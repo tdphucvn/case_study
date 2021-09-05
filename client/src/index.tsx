@@ -8,8 +8,9 @@ import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
-import { CookiesProvider } from 'react-cookie';
 
+
+// create custom theme
 const theme = createTheme({
   palette: {
     primary: {
@@ -21,17 +22,16 @@ const theme = createTheme({
   }
 });
 
+// presisting data in localStorage
 let persistor = persistStore(store);
 
 ReactDOM.render(
     <ThemeProvider theme={theme}>
-      <CookiesProvider>
           <Provider store={store}>
               <PersistGate loading={null} persistor={persistor}>
                   <App />
               </PersistGate>
           </Provider>
-      </CookiesProvider>
     </ThemeProvider>,
   document.getElementById('root')
 );

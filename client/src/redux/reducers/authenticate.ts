@@ -25,12 +25,14 @@ interface ILogoutData {
     message: string;
 };
 
+// default state of the store
 const initialState: IAuthenticate = {
     authenticated: false,
     accessToken: '',
     id: ''
 };
 
+// calling API request to login
 export const loginRequest = createAsyncThunk(
     'user/loginRequestStatus', 
     async (credentials: ILoginCredentials, { rejectWithValue }) => {
@@ -46,6 +48,7 @@ export const loginRequest = createAsyncThunk(
     },
 );
 
+// calling API request to register
 export const registerRequest = createAsyncThunk(
     'user/registerRequestStatus',
     async (credentials: IRegisterCredentials, { rejectWithValue }) => {
@@ -60,6 +63,7 @@ export const registerRequest = createAsyncThunk(
     },
 );
 
+// calling API request to logout
 export const logoutRequest = createAsyncThunk(
     'user/logoutRequestStatus',
     async ( data: ILogoutData, {rejectWithValue}) => {
@@ -78,6 +82,7 @@ export const authenticateSlice = createSlice({
     name: 'authenticate',
     initialState,
     reducers: {
+        // update accessToken if provided (after accessToken being expired)
         updateAccessToken: (state, action) => {
             state.accessToken = action.payload;
         },

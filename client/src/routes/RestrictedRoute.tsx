@@ -3,6 +3,8 @@ import { Route, Redirect } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 
+
+// Restricted routes could be accessed only if the client is not authenticated
 const RestrictedRoute = (props: any) => {
     const {component: Component, ...rest} = props;
     const { authenticated } = useSelector((state: RootState) => state.auth);

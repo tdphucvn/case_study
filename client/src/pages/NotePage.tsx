@@ -4,6 +4,7 @@ import NoteNavigation from '../components/note/NoteNavigation';
 import NoteContainer from '../components/note/NoteContainer';
 import GetStarted from '../components/note/GetStarted';
 
+// Private route is used to display the note editor - accessible only if the client is authenticated
 import PrivateRoute from '../routes/PrivateRoute';
 
 import { Route, Switch } from 'react-router-dom';

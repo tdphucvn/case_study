@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Drawer, List, ListItem, ListItemText, makeStyles } from '@material-ui/core';
+import { Drawer, makeStyles } from '@material-ui/core';
 import NotesPanelHeader from './NotesPanelHeader';
 import SearchBar from './SearchBar';
 import NotesPreviewContainer from './NotesPreviewContainer';
@@ -32,8 +32,8 @@ const DrawerNavigation = (props: Props) => {
         setDrawer(open);
     };
 
+    // helper function to close the drawer
     const helperToggleDrawer = () => {
-        console.log('Hello')
         setDrawer(false);
     };
  

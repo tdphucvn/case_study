@@ -32,9 +32,13 @@ const NotesPreviewContainer = (props: IProps) => {
     const { notes } = useSelector((state: RootState) => state.notes);
     const [displayedNotes, setDisplayedNotes] = useState<Array<INote>>([]);
 
+    // on change of notes, and search query values
     useEffect(() => {
+        // if the search query is empty display unfiltered notes
         if(props.searchQuery === '') setDisplayedNotes(notes);
+        // creating a regex with search query
         const searchNotesRegex = new RegExp(props.searchQuery, "i");
+        // filter notes with the given regex
         filterNotes(searchNotesRegex);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.searchQuery, notes]);

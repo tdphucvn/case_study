@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import { Grid, TextField, InputAdornment, makeStyles } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 
+// import debounce to delay calling changeHandler function
 import debounce from 'lodash.debounce';
 
 const useStyles = makeStyles((theme) => ({
@@ -23,12 +24,14 @@ interface IProps {
 const SearchBar = (props: IProps) => {
     const classes = useStyles();
     
+    // setting the search query
     const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         props.setSearchQuery(event.target.value);
     };
     
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const debouncedChangeHandler = useCallback(
+        // delay 300 ms before calling changeHandler
         debounce(changeHandler, 300)
     // eslint-disable-next-line react-hooks/exhaustive-deps
     , []);

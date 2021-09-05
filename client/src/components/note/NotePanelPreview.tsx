@@ -38,6 +38,7 @@ const NotePanelPreview = (props: IProps) => {
     const { activeNote } = useSelector((state: RootState) => state.notes);
 
     useEffect(() => {
+        // if the certain note is active
         if(activeNote === note) {
             setActive(true);
             return;
@@ -45,8 +46,14 @@ const NotePanelPreview = (props: IProps) => {
         setActive(false);
     }, [activeNote, note]);
 
+    // creating published date value
     const date = new Date(note.date);
-    const publishedDate = date.getDate() + '.' + date.getMonth() + '.' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes();
+    // if the minutes are less than 10 add aditional '0'
+    const getFullMinutes = (min: number) => {
+        if(min < 10) return '0'+ min;
+        return min; 
+    };
+    const publishedDate = date.getDate() + '.' + date.getMonth() + '.' + date.getFullYear() + ' ' + date.getHours() + ':' + getFullMinutes(date.getMinutes());
 
     return (
         <Container className={classes.notePreviewContainer} component={RouterLink} to={`${note._id}`}>

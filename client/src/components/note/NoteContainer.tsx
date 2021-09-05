@@ -45,26 +45,35 @@ const NoteContainer = () => {
     const dispatch = useDispatch<AppDispatch>();
     const history = useHistory();
 
+    // if the minutes are less than 10 add aditional '0'
+    const getFullMinutes = (min: number) => {
+        if(min < 10) return '0'+ min;
+        return min; 
+    };
+
     useEffect(() => {
-        id === "new" ? setNewNote(true) : setNewNote(false);
         if(id === "new") { 
             setNoteContent(''); 
             setNewNote(true);
             setNote(null);
             const currentDate = new Date();
-            const createDate = currentDate.getDate() + '.' + currentDate.getMonth() + '.' + currentDate.getFullYear() + ' ' + currentDate.getHours() + ':' + currentDate.getMinutes();
+            const createDate = currentDate.getDate() + '.' + currentDate.getMonth() + '.' + currentDate.getFullYear() + ' ' + currentDate.getHours() + ':' + getFullMinutes(currentDate.getMinutes());
             setEditDate(createDate);       
         }
         else {
+            setNewNote(false);
+            // find the note in the database
             const displayedNote = notes.find((note: INote) => note._id === id);
             setNote(displayedNote);
             if(displayedNote === undefined) return;
             setNoteContent(displayedNote.content);
 
+            // creating published date value
             const date = new Date(displayedNote.date);
-            const publishedDate = date.getDate() + '.' + date.getMonth() + '.' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes();        
-
+            const publishedDate = date.getDate() + '.' + date.getMonth() + '.' + date.getFullYear() + ' ' + date.getHours() + ':' + getFullMinutes(date.getMinutes());
+            
             setEditDate(publishedDate);
+            // set the current note to be active
             dispatch(setActive(displayedNote));
         };
 
@@ -72,10 +81,13 @@ const NoteContainer = () => {
 
     const getNoteContent = () => {
         const editor = document.getElementById('note-editor');
+        // get the formated data in the editor
         const content = editor.innerHTML;
+        // get the text data in the editor
         const preview = editor.innerText;
         const title = editor.innerText.substring(0, 20);
         
+        // if it is new note than call API request to create new note
         if(newNote) {
             addNote(title, content, preview, accessToken)
                 .then((res) => {
@@ -83,8 +95,10 @@ const NoteContainer = () => {
                    return res.data.savedNote;
                 })
                 .then((data) => {
+                    // add new note to the redux store
                     dispatch(addNoteReducer(data));
                     const {_id} = data;
+                    // redirect to the note URL
                     history.push(`/${_id}`);
                 })
                 .catch((err) => {
@@ -94,11 +108,13 @@ const NoteContainer = () => {
             return;
         };
 
+        // if client wants to update the note call API request to update note
         updateNote(title, content, preview, accessToken, id)
             .then((res) => {
                 if(res.data.accessToken !== undefined) dispatch(updateAccessToken(res.data.accessToken));
                 return res.data.note
             })
+            // update note in the database
             .then((data) => dispatch(updateNoteReducer(data)))
             .catch((err) => {
                 const status = err.response.status;
@@ -107,12 +123,15 @@ const NoteContainer = () => {
         return;
     };
 
+    // call API request to delete note
     const deleteNoteFunction = () => {
         deleteNote(accessToken, id)
             .then(res => {
                 if(res.data.accessToken !== undefined) dispatch(updateAccessToken(res.data.accessToken));
             })
+            // delete note in the redux store
             .then(() => dispatch(deleteNoteReducer(note)))
+            // redirect to the main page
             .then(() => history.push('/'))
             .catch((err) => {
                 const status = err.response.status;
@@ -125,6 +144,7 @@ const NoteContainer = () => {
         dispatch(unauthorized());
     }
 
+    // on component mount display the the formated data of the note
     useEffect(() => {
         const editor = document.getElementById('note-editor');
         if(editor === null) return;

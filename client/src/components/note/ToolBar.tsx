@@ -73,22 +73,28 @@ interface IProps {
 const ToolBar = (props: IProps) => {
     const classes = useStyles();
     
+    // on component mount
     useEffect(() => {
         const editButtons = document.querySelectorAll('[data-edit]');
         const spans = document.querySelectorAll('[data-edit] .MuiIconButton-label');
         
+        // disabling clicking on the span
         spans.forEach((span) => {
             const sp = span as HTMLElement;
             sp.style.pointerEvents = 'none';
         });
 
+        // add event listener on click event
         editButtons.forEach(button => {
             const bt = button as HTMLButtonElement;
+            // if the button doesn't have an event listener yet
             if (bt.getAttribute('listener') !== 'true') {
                 button.addEventListener('click', (e) => {
                     e.preventDefault();
                     const btn = e.target as HTMLElement;
+                    // get the command data from the button
                     const cmd_val = btn.getAttribute('data-edit').split(':');
+                    // executing the command to format chosen text
                     document.execCommand(cmd_val[0], false, cmd_val[1]);
                 });
             };

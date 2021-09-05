@@ -45,12 +45,15 @@ const NoteNavigation = (props: {width: Breakpoint}) => {
     const { authenticated } = useSelector((state: RootState) => state.auth);
     const { lightMode } = useSelector((state: RootState) => state.mode);
 
+    // call the Api request to logout
     const handleLogOut = () => {
         dispatch(logoutRequest({message: "Logout request"}))
             .then(res => console.log(res))
+            // after being logout clear notes data in the redux store
             .then(() => dispatch(cleanNotes()));
     };
 
+    // handle change of the mode
     const handleChangeMode = () => {
         dispatch(changeMode())
     };
