@@ -15,11 +15,18 @@ const useStyles = makeStyles((theme) => ({
         margin: '20px 0',
         padding: '0',
         textDecoration: 'none',
-        color: 'black'
+        color: 'black',
     },
     noteCard: {
+        color: theme.palette.common.black,
+        borderColor: theme.palette.primary.main,
+        border: '2px solid',
+        backgroundColor: theme.palette.primary.light,
         '&:hover': {
             boxShadow: '0px 4px 10px 0px rgba(0,0,0,0.64)',
+        },
+        '& .MuiCardHeader-subheader': {
+            color: theme.palette.common.black,
         }
     },
     activeLink: {
@@ -28,7 +35,6 @@ const useStyles = makeStyles((theme) => ({
     noteContent: {
         padding: '0 16px',
     },
-
 }));
 
 const NotePanelPreview = (props: IProps) => {
@@ -58,12 +64,12 @@ const NotePanelPreview = (props: IProps) => {
     return (
         <Container className={classes.notePreviewContainer} component={RouterLink} to={`${note._id}`}>
             <Card elevation={3} className={clsx(classes.noteCard, active ? classes.activeLink : null)}>
-                <CardHeader 
+                <CardHeader
                     title={note.title.length > 20 ? note.title.substring(0,17) + '...' : note.title}
                     subheader={publishedDate}
                 />
                 <CardContent className={classes.noteContent}>
-                    <Typography variant="body2" color="textPrimary">{note.preview.length > 150 ? note.preview.substring(0, 147) + '...' : note.preview}</Typography>
+                    <Typography variant="body2">{note.preview.length > 150 ? note.preview.substring(0, 147) + '...' : note.preview}</Typography>
                 </CardContent>
             </Card>
         </Container>

@@ -11,6 +11,7 @@ const useStyles = makeStyles((theme) => ({
         width: '80%',
         padding: '0',
         overflow: 'auto',
+        backgroundColor: theme.palette.primary.dark,
     }
 }));
 

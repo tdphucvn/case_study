@@ -34,6 +34,8 @@ const StyledMenuItem = withStyles((theme) => ({
         color: theme.palette.common.white,
       },
     },
+    backgroundColor: theme.palette.primary.dark,
+    color: theme.palette.common.black,
   },
 }))(MenuItem);
 

@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
     panelContainer: {
         height: '100vh',
         maxHeight: '100vh',
-        backgroundColor: '#F8F8F8',
+        backgroundColor: theme.palette.primary.dark,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',

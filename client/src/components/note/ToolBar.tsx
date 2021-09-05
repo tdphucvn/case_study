@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     toolBarContainer: {
         height: '10%',
         maxWidth: 'none',
-        backgroundColor: '#F8F8F8',
+        backgroundColor: theme.palette.primary.dark,
         display: 'flex',
         alignItems: 'center',
         [theme.breakpoints.down('md')]: {

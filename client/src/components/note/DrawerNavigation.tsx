@@ -8,6 +8,7 @@ const useStyles = makeStyles((theme) => ({
     drawer: {
         width: '100vw',
         height: '100%',
+        backgroundColor: theme.palette.primary.dark
     }
 }));
 

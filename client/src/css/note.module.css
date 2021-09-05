@@ -17,3 +17,8 @@
   outline: 1px solid #009788;
   box-shadow: 0 0 3px #009788;
 }
+
+.darkMode {
+  background-color: #2a2d37;
+  color: white;
+}

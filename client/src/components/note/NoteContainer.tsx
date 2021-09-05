@@ -8,8 +8,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../../redux/store';
 import { addNote, updateNote, deleteNote } from '../../api/notesApi';
 import { INote } from './NotesPreviewContainer';
-import { addNote as addNoteReducer, updateNote as updateNoteReducer, setActive, deleteNote as deleteNoteReducer, cleanNotes } from '../../redux/reducers/notes';
+import { addNote as addNoteReducer, updateNote as updateNoteReducer, setActive, unsetActive, deleteNote as deleteNoteReducer, cleanNotes } from '../../redux/reducers/notes';
 import { unauthorized, updateAccessToken } from '../../redux/reducers/authenticate';
+import clsx from 'clsx';
 
 const useStyles = makeStyles((theme) => ({
     noteContainer: {
@@ -19,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
     },
     date: {
         marginTop: theme.spacing(5),
+        color: theme.palette.common.black,
     },
     errorMessage: {
         height: '90%',
@@ -42,6 +44,7 @@ const NoteContainer = () => {
     const [editDate, setEditDate] = useState<string>('');
     const { accessToken } = useSelector((state: RootState) => state.auth);
     const { notes } = useSelector((state: RootState) => state.notes);
+    const { lightMode } = useSelector((state: RootState) => state.mode);
     const dispatch = useDispatch<AppDispatch>();
     const history = useHistory();
 
@@ -58,7 +61,8 @@ const NoteContainer = () => {
             setNote(null);
             const currentDate = new Date();
             const createDate = currentDate.getDate() + '.' + currentDate.getMonth() + '.' + currentDate.getFullYear() + ' ' + currentDate.getHours() + ':' + getFullMinutes(currentDate.getMinutes());
-            setEditDate(createDate);       
+            setEditDate(createDate);
+            dispatch(unsetActive());       
         }
         else {
             setNewNote(false);
@@ -156,9 +160,9 @@ const NoteContainer = () => {
             <>
                 <ToolBar saveFunction={getNoteContent} deleteFunction={deleteNoteFunction} note={note}/>
                 <div className={classes.noteContainer}>
-                    <div className={noteStyles.editor} id="note-editor" contentEditable="true"></div> 
+                    <div className={clsx(noteStyles.editor, !lightMode ? noteStyles.darkMode : null)} id="note-editor" contentEditable="true"></div> 
     
-                    <Typography variant="h6" color="textSecondary" className={classes.date}>Last Edit: {editDate}</Typography>
+                    <Typography variant="h6" className={classes.date}>Last Edit: {editDate}</Typography>
                 </div>
             </>
         )

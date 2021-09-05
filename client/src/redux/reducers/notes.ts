@@ -65,6 +65,9 @@ export const notesSlice = createSlice({
             const newActiveNote: Note = action.payload;
             state.activeNote = newActiveNote;
         },
+        unsetActive: (state) => {
+            state.activeNote = null;
+        },
         // clean notes - setting the store to default state
         cleanNotes: (state) => {
             state.activeNote = null;
@@ -78,5 +81,5 @@ export const notesSlice = createSlice({
     },
 });
 
-export const { addNote, updateNote, deleteNote, setActive, cleanNotes } = notesSlice.actions;
+export const { addNote, updateNote, deleteNote, setActive, cleanNotes, unsetActive } = notesSlice.actions;
 export default notesSlice.reducer;

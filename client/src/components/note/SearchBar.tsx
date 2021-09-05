@@ -14,6 +14,8 @@ const useStyles = makeStyles((theme) => ({
         width: '80%',
         margin: 'auto',
         boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+        backgroundColor: 'white',
+        color: 'white'
     }
 }));
 

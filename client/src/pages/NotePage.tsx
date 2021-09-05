@@ -13,6 +13,7 @@ import { Grid, makeStyles } from '@material-ui/core';
  
 const useStyles = makeStyles((theme) => ({
     container: {
+        backgroundColor: theme.palette.primary.light,
         [theme.breakpoints.down('sm')]: {
             display: 'block',
         },
