@@ -13,6 +13,7 @@ import FormatListNumberedIcon from '@material-ui/icons/FormatListNumbered';
 
 import DropdownButtons from './DropdownButtons';
 import { INote } from './NotesPreviewContainer';
+import clsx from 'clsx';
 
 const useStyles = makeStyles((theme) => ({
     toolBarContainer: {
@@ -60,6 +61,13 @@ const useStyles = makeStyles((theme) => ({
         },
         [theme.breakpoints.down('sm')]: {
             padding: '10px 0',
+        },
+    },
+    root: {
+        backgroundColor: '#009788',
+        color: 'white',
+        '&:hover': {
+            backgroundColor: '#009788',
         },
     }
 }));
@@ -118,8 +126,8 @@ const ToolBar = (props: IProps) => {
             </div>
             <div className={classes.grow}></div>
             <div className={classes.buttonGroup}>
-                { props.note !== null && props.note !== undefined && <Button color="secondary" variant="contained" className={classes.saveButton} onClick={props.deleteFunction} style={{marginRight: 10}}>Delete</Button> }
-                <Button color="primary" variant="contained" className={classes.saveButton} onClick={props.saveFunction}>Save</Button>
+                { props.note !== null && props.note !== undefined && <Button color="secondary" variant="contained" className={clsx(classes.saveButton, classes.root)} onClick={props.deleteFunction} style={{marginRight: 10}}>Delete</Button> }
+                <Button color="primary" variant="contained" className={clsx(classes.saveButton, classes.root)} onClick={props.saveFunction}>Save</Button>
             </div>
         </Container>
     )
