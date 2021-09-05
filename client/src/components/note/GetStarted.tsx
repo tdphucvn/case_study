@@ -17,6 +17,13 @@ const useStyles = makeStyles((theme) => ({
         },
         color: theme.palette.common.black,
     },
+    root: {
+        backgroundColor: '#009788',
+        color: 'white',
+        '&:hover': {
+            backgroundColor: '#009788',
+        },
+    }
 }));
 
 const GetStarted = () => {
@@ -27,7 +34,7 @@ const GetStarted = () => {
         <Container className={classes.getStartedContainer}>
             <Typography variant="h6" align="center">Click on the button to get started with us!</Typography>
             <Typography variant="subtitle1" align="center" gutterBottom>Write down your thoughts...</Typography>
-            <Button color="primary" variant="contained" component={RouterLink} to={authenticated ? '/new' : '/login'}>Get started</Button>
+            <Button className={classes.root} variant="contained" component={RouterLink} to={authenticated ? '/new' : '/login'}>Get started</Button>
         </Container>
     )
 }

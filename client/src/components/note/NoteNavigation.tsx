@@ -8,6 +8,7 @@ import { AppDispatch } from '../../redux/store';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { cleanNotes } from '../../redux/reducers/notes';
+import clsx from 'clsx';
 
 import Brightness2Icon from '@material-ui/icons/Brightness2';
 import Brightness7Icon from '@material-ui/icons/Brightness7';
@@ -36,6 +37,13 @@ const useStyles = makeStyles((theme) => ({
         width: '100px',
         marginLeft: theme.spacing(3),
     },
+    root: {
+        backgroundColor: '#009788',
+        color: 'white',
+        '&:hover': {
+            backgroundColor: '#009788',
+        },
+    }
 }));
 
 const NoteNavigation = (props: {width: Breakpoint}) => {
@@ -69,9 +77,9 @@ const NoteNavigation = (props: {width: Breakpoint}) => {
                     {lightMode ? <Brightness2Icon color="primary"/> : <Brightness7Icon color="primary"/>}
                 </IconButton>
                 {!authenticated ? 
-                    <Button color="primary" variant="contained" className={classes.authenticationButton} component={RouterLink} to="/login">Login</Button>
+                    <Button variant="contained" className={ clsx(classes.authenticationButton, classes.root)} component={RouterLink} to="/login">Login</Button>
                     :
-                    <Button color="primary" variant="contained" className={classes.authenticationButton} onClick={handleLogOut}>Log Out</Button>
+                    <Button variant="contained" className={clsx(classes.authenticationButton, classes.root)} onClick={handleLogOut}>Log Out</Button>
                 }
             </div>
             {props.width === 'sm' || props.width === "xs" ? <DrawerNavigation drawer={drawer} setDrawer={setDrawer}/> : null}

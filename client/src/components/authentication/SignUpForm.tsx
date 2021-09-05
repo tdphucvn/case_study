@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { registerRequest } from '../../redux/reducers/authenticate'; 
 import { AppDispatch } from '../../redux/store';
 import { useHistory } from 'react-router';
+import clsx from 'clsx';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -39,6 +40,13 @@ const useStyles = makeStyles((theme) => ({
       color: '#587D9F',
     },
   },
+  root: {
+    backgroundColor: '#009788',
+    color: 'white',
+    '&:hover': {
+        backgroundColor: '#009788',
+    },
+  }
 }));
 
 type ErrorMessage = {
@@ -135,7 +143,7 @@ const RegisterForm = () => {
               <TextField error={!matchingPasswords} variant="outlined" required fullWidth name="comfirmpassword" label="Confirm Password" type="password" id="confirmpassword" onChange={handleMatchingPasswords}/>
             </Grid>
           </Grid>
-          <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit} >
+          <Button type="submit" fullWidth variant="contained" className={clsx(classes.submit, classes.root)} >
             Sign Up
           </Button>
           <Grid container>

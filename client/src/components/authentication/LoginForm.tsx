@@ -5,6 +5,7 @@ import { Link as RouterLink, useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { loginRequest } from '../../redux/reducers/authenticate'; 
 import { AppDispatch } from '../../redux/store';
+import clsx from 'clsx';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -37,6 +38,13 @@ const useStyles = makeStyles((theme) => ({
       color: '#587D9F',
     },
   },
+  root: {
+    backgroundColor: '#009788',
+    color: 'white',
+    '&:hover': {
+        backgroundColor: '#009788',
+    },
+  }
 }));
 
 type ErrorMessage = {
@@ -91,7 +99,7 @@ const LoginForm = () => {
         <form className={classes.form} noValidate onSubmit={handleLoginRequest}>
           <TextField variant="outlined" margin="normal" required fullWidth id="username" label="Username" type="text" name="username" autoFocus />
           <TextField variant="outlined" margin="normal" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="current-password" />
-          <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
+          <Button type="submit" fullWidth variant="contained" className={clsx(classes.submit, classes.root)}>
             Sign In
           </Button>
           <Grid container>
