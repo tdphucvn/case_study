@@ -14,7 +14,8 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'center',
         [theme.breakpoints.down('xs')]: {
             padding: '0 5px'
-        }
+        },
+        color: theme.palette.common.black,
     },
 }));
 

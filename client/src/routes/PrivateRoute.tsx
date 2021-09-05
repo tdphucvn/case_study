@@ -8,6 +8,8 @@ const PrivateRoute = (props: any) => {
     const {component: Component, ...rest} = props;
     const { authenticated } = useSelector((state: RootState) => state.auth);
 
+    if(!authenticated) alert('Sign In Please.')
+
     return (
         <Route {...rest} render={() => (authenticated ? <Component /> : <Redirect to="/" />)}/>
     )
