@@ -49,7 +49,7 @@ var getNotes = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                 _a.trys.push([0, 2, , 3]);
                 user = req.decoded.user;
                 id = user._id;
-                return [4, Note_1.default.find({ user: id })];
+                return [4, Note_1.default.find({ user: id }).sort({ date: -1 })];
             case 1:
                 notes = _a.sent();
                 newAccessToken = req.accessToken;

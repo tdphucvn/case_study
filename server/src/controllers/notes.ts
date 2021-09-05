@@ -8,7 +8,7 @@ export const getNotes = async (req: Request | any, res: Response): Promise<void>
         const { _id: id } = user;
 
         // get all the notes from the database that belong to the client
-        const notes = await Note.find({user: id});
+        const notes = await Note.find({user: id}).sort({date: -1});
         
         const newAccessToken = req.accessToken;
         // if the new accessToken is provided send it with the response to the client side
