@@ -5,7 +5,7 @@ import { INote } from '../types/interfaces';
 export const getNotes = async (req: Request | any, res: Response): Promise<void> => {
     try {
         const { user } = req.decoded;
-        const { _id: id } = user;
+        const { user_id: id } = user;
 
         // get all the notes from the database that belong to the client
         const notes = await Note.find({user: id}).sort({date: -1});
