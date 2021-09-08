@@ -5,6 +5,7 @@ import { INote } from '../types/interfaces';
 export const getNotes = async (req: Request | any, res: Response): Promise<void> => {
     try {
         const { user } = req.decoded;
+        console.log(user)
         const { user_id: id } = user;
 
         // get all the notes from the database that belong to the client
@@ -23,6 +24,7 @@ export const getNotes = async (req: Request | any, res: Response): Promise<void>
 export const addNote = async (req: Request | any, res: Response): Promise<void> => {
     try {
         const { user } = req.decoded;
+        console.log(user)
         const { user_id: id } = user;
 
         // get the data from the client
