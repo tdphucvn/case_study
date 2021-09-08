@@ -91,6 +91,7 @@ const NoteContainer = () => {
         const preview = editor.innerText;
         const title = editor.innerText.substring(0, 20);
         
+        if(!content || !preview) { alert('Cannot save an empty note!'); return; }
         // if it is new note than call API request to create new note
         if(newNote) {
             addNote(title, content, preview, accessToken)

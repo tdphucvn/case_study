@@ -51,6 +51,11 @@ var authenticate = function (req, res, next) { return __awaiter(void 0, void 0, 
                 return [4, User_1.default.findById(userId)];
             case 1:
                 user = _a.sent();
+                if (user === null) {
+                    res.status(401).json({ message: 'Unauthorized' });
+                    return [2];
+                }
+                ;
                 authHeader = req.headers.authorization;
                 if (!authHeader) {
                     res.status(401).json({ message: 'Unauthorized' });
@@ -63,11 +68,6 @@ var authenticate = function (req, res, next) { return __awaiter(void 0, void 0, 
                 return [4, jsonwebtoken_1.default.verify(accessToken, accessTokenSecret)];
             case 3:
                 decoded = _a.sent();
-                if (JSON.stringify(decoded.user) !== JSON.stringify(user)) {
-                    res.status(401).json({ message: 'Unauthorized' });
-                    return [2];
-                }
-                ;
                 req.decoded = decoded;
                 return [3, 9];
             case 4:
@@ -85,8 +85,8 @@ var authenticate = function (req, res, next) { return __awaiter(void 0, void 0, 
                 return [4, jsonwebtoken_1.default.verify(refreshToken, refreshTokenSecret)];
             case 6:
                 decoded = _a.sent();
-                newAccessToken = jsonwebtoken_1.default.sign({ user: user }, accessTokenSecret, { expiresIn: '30s' });
-                newRefreshToken = jsonwebtoken_1.default.sign({ user: user }, refreshTokenSecret, { expiresIn: '1day' });
+                newAccessToken = jsonwebtoken_1.default.sign({ user_id: user._id, email: user.email }, accessTokenSecret, { expiresIn: '30s' });
+                newRefreshToken = jsonwebtoken_1.default.sign({ user_id: user._id, email: user.email }, refreshTokenSecret, { expiresIn: '1day' });
                 req.accessToken = newAccessToken;
                 req.decoded = decoded;
                 res.cookie('refreshToken', newRefreshToken, { httpOnly: true });

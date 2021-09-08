@@ -42,13 +42,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteNote = exports.editNote = exports.addNote = exports.getNotes = void 0;
 var Note_1 = __importDefault(require("../model/Note"));
 var getNotes = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, id, notes, newAccessToken, error_1;
+    var id, notes, newAccessToken, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                user = req.decoded.user;
-                id = user._id;
+                id = req.decoded.user_id;
                 return [4, Note_1.default.find({ user: id }).sort({ date: -1 })];
             case 1:
                 notes = _a.sent();
@@ -72,13 +71,12 @@ var getNotes = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
 }); };
 exports.getNotes = getNotes;
 var addNote = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, id, _a, title, content, preview, newNote, savedNote, accessToken, error_2;
+    var id, _a, title, content, preview, newNote, savedNote, accessToken, error_2;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 _b.trys.push([0, 2, , 3]);
-                user = req.decoded.user;
-                id = user._id;
+                id = req.decoded.user_id;
                 _a = req.body, title = _a.title, content = _a.content, preview = _a.preview;
                 newNote = new Note_1.default({
                     title: title,

@@ -133,8 +133,8 @@ exports.logoutRequest = logoutRequest;
 var assigningTokens = function (user, response) {
     var accessSecretToken = "" + process.env.ACCESS_TOKEN_SECRET;
     var refreshSecretToken = "" + process.env.REFRESH_TOKEN_SECRET;
-    var newAccessToken = jsonwebtoken_1.default.sign({ user: user }, accessSecretToken, { expiresIn: '30s' });
-    var newRefreshToken = jsonwebtoken_1.default.sign({ user: user }, refreshSecretToken, { expiresIn: '1day' });
+    var newAccessToken = jsonwebtoken_1.default.sign({ user_id: user._id }, accessSecretToken, { expiresIn: '30s' });
+    var newRefreshToken = jsonwebtoken_1.default.sign({ user_id: user._id }, refreshSecretToken, { expiresIn: '1day' });
     response.cookie('authorization', newAccessToken, { httpOnly: true, secure: true });
     response.cookie('refreshToken', newRefreshToken, { httpOnly: true, secure: true });
     response.cookie('id', user.id, { httpOnly: true, secure: true });
