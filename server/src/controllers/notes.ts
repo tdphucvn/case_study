@@ -23,7 +23,7 @@ export const getNotes = async (req: Request | any, res: Response): Promise<void>
 export const addNote = async (req: Request | any, res: Response): Promise<void> => {
     try {
         const { user } = req.decoded;
-        const { _id: id } = user;
+        const { user_id: id } = user;
 
         // get the data from the client
         const { title, content, preview } = req.body;
