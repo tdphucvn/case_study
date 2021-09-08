@@ -8,6 +8,7 @@ const authenticate =async (req: Request | any, res: Response, next: NextFunction
     const userId: string = req.cookies.id;
     // find the client in the database
     const user = await User.findById(userId);
+    if(user === null) {res.status(401).json({message: 'Unauthorized'}); return;}
     // get the accessToken from the header of the request
     const authHeader = req.headers.authorization;
     if(!authHeader) {res.status(401).json({message: 'Unauthorized'}); return;}
@@ -28,8 +29,8 @@ const authenticate =async (req: Request | any, res: Response, next: NextFunction
             // verify the refreshToken
             const decoded: any = await jwt.verify(refreshToken, refreshTokenSecret);            
             // Creating new tokens
-            const newAccessToken = jwt.sign({ user: user }, accessTokenSecret, {expiresIn: '30s'});
-            const newRefreshToken = jwt.sign({ user: user }, refreshTokenSecret, {expiresIn: '1day'});
+            const newAccessToken = jwt.sign({ user_id: user._id, email: user.email }, accessTokenSecret, {expiresIn: '30s'});
+            const newRefreshToken = jwt.sign({ user_id: user._id, email: user.email }, refreshTokenSecret, {expiresIn: '1day'});
 
             req.accessToken = newAccessToken;
             req.decoded = decoded;
